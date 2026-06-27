@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Shipment &middot; Speed-Shipping and Security Company</title>
+    <title>{% if vault %}Vault Custody Ledger{% else %}Track Shipment{% endif %} &middot; Speed-Shipping and Security Company</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='leaflet/leaflet.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='tracking.css') }}?v=9">
+    <link rel="stylesheet" href="{{ url_for('static', filename='tracking.css') }}?v=10">
 </head>
-<body class="track-page">
+<body class="track-page{% if vault %} vault-client-page{% endif %}">
 
     {% if show_port_warning %}
     <div id="trackPortWarning" class="track-port-warning" hidden role="alert">
@@ -27,6 +27,26 @@
         </nav>
     </header>
 
+    {% if vault %}
+    <section class="vault-hero" aria-label="Secure vault custody">
+        <div class="vault-hero-bg"></div>
+        <div class="vault-gold-stack" aria-hidden="true">
+            <span class="vault-gold-bar"></span>
+            <span class="vault-gold-bar"></span>
+            <span class="vault-gold-bar"></span>
+            <span class="vault-gold-bar vault-gold-bar--small"></span>
+        </div>
+        <div class="vault-hero-content">
+            <p class="vault-hero-eyebrow">Speed-Shipping and Security Company</p>
+            <h1 class="vault-hero-title">Secure Vault Custody Ledger</h1>
+            <p class="vault-hero-sub">Client safe-keeping record · Accredited bullion depository</p>
+            <div class="vault-hero-meta">
+                <span>Reference <strong>{{ vault.tracking_code }}</strong></span>
+                <span>Vault <strong>{{ vault.vault_number }}</strong></span>
+            </div>
+        </div>
+    </section>
+    {% else %}
     <section class="track-map-hero" aria-label="Live shipment map">
         <div id="liveTrackingMap" class="track-map-canvas"></div>
         <div class="track-map-hud">
@@ -40,6 +60,7 @@
         </div>
         <div id="trackMapLoading" class="track-map-loading">Loading live GPS map&hellip;</div>
     </section>
+    {% endif %}
 
     <main class="track-main">
         <div class="track-search-bar">
@@ -58,7 +79,90 @@
             </form>
         </div>
 
-        {% if shipment %}
+        {% if vault %}
+        <div id="vaultLedger" class="vault-ledger">
+            <div class="vault-ledger-header">
+                <div>
+                    <p class="vault-ledger-eyebrow">Confidential client record</p>
+                    <h2>Vault Deposit Ledger</h2>
+                    <p class="vault-ledger-ref">Ledger ref. {{ vault.ledger_reference }}</p>
+                </div>
+                <div class="vault-status-badge vault-status-badge--{{ vault.account_status_class or 'active' }}">
+                    {{ vault.account_status }}
+                </div>
+            </div>
+
+            <div class="vault-asset-banner">
+                <div class="vault-asset-icon" aria-hidden="true">
+                    <span class="vault-gold-bar vault-gold-bar--ledger"></span>
+                    <span class="vault-gold-bar vault-gold-bar--ledger"></span>
+                    <span class="vault-gold-bar vault-gold-bar--ledger"></span>
+                </div>
+                <div>
+                    <p class="vault-asset-label">Custody asset on file</p>
+                    <h3>{{ vault.item_deposited }}</h3>
+                    <p class="vault-asset-meta">{{ vault.item_class }} · {{ vault.item_weight }} · {{ vault.deposit_purpose }}</p>
+                </div>
+                <div class="vault-asset-value">
+                    <span>Valuation reference</span>
+                    <strong>{{ vault.valuation_reference }}</strong>
+                </div>
+            </div>
+
+            <div class="vault-ledger-grid">
+                <div class="vault-ledger-section">
+                    <h4>Account &amp; transaction</h4>
+                    <div class="vault-ledger-rows">
+                        <div class="vault-row"><span>Tracking code</span><strong>{{ vault.tracking_code }}</strong></div>
+                        <div class="vault-row"><span>Transaction code</span><strong>{{ vault.transaction_code }}</strong></div>
+                        <div class="vault-row"><span>Membership type</span><strong>{{ vault.membership_type }}</strong></div>
+                        <div class="vault-row"><span>Date of deposit</span><strong>{{ vault.deposit_date }}</strong></div>
+                        <div class="vault-row"><span>Purpose of deposit</span><strong>{{ vault.deposit_purpose }}</strong></div>
+                        <div class="vault-row"><span>Monthly custody charge</span><strong>{{ vault.monthly_charge }}</strong></div>
+                    </div>
+                </div>
+
+                <div class="vault-ledger-section">
+                    <h4>Depositor &amp; beneficiary</h4>
+                    <div class="vault-ledger-rows">
+                        <div class="vault-row"><span>Name of depositor</span><strong>{{ vault.depositor_name }}</strong></div>
+                        <div class="vault-row vault-row--sub"><span></span><em>{{ vault.depositor_title }}</em></div>
+                        <div class="vault-row"><span>Next of kin</span><strong>{{ vault.next_of_kin }}</strong></div>
+                        <div class="vault-row vault-row--sub"><span></span><em>{{ vault.next_of_kin_title }}</em></div>
+                    </div>
+                </div>
+
+                <div class="vault-ledger-section">
+                    <h4>Vault custody &amp; insurance</h4>
+                    <div class="vault-ledger-rows">
+                        <div class="vault-row"><span>Vault number</span><strong>{{ vault.vault_number }}</strong></div>
+                        <div class="vault-row"><span>Custody location</span><strong>{{ vault.custody_location }}</strong></div>
+                        <div class="vault-row"><span>Insurance coverage</span><strong>{{ vault.insurance }}</strong></div>
+                        <div class="vault-row"><span>Assigned agent</span><strong>{{ vault.agent_name }}</strong></div>
+                        <div class="vault-row"><span>Agent ID</span><strong>{{ vault.agent_id }}</strong></div>
+                        <div class="vault-row"><span>Account holding status</span><strong class="vault-text-warn">{{ vault.account_status }}</strong></div>
+                    </div>
+                </div>
+
+                <div class="vault-ledger-section">
+                    <h4>Financial clearance</h4>
+                    <div class="vault-ledger-rows">
+                        <div class="vault-row"><span>Outstanding clearance fee</span><strong class="vault-text-warn">{{ vault.outstanding_clearance_fee }}</strong></div>
+                        <div class="vault-row"><span>Valuation reference</span><strong>{{ vault.valuation_reference }}</strong></div>
+                        <div class="vault-row"><span>Recent payment record</span><strong>{{ vault.recent_payment_date }}</strong></div>
+                        <div class="vault-row vault-row--sub"><span></span><em>{{ vault.recent_payment_source }}</em></div>
+                        <div class="vault-row"><span>Receipt number</span><strong>{{ vault.receipt_number }}</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vault-ledger-footer">
+                <p>This ledger is an official custody record issued by Speed-Shipping and Security Company. Access is encrypted and audit-logged under accredited clearing standards.</p>
+                <p class="track-sync-line">Last verified: <span>{{ vault.last_verified or 'Verified' }}</span></p>
+            </div>
+        </div>
+
+        {% elif shipment %}
         <div id="trackingDetails" class="track-details">
             <div class="track-ledger-brand">
                 <div>
@@ -179,6 +283,7 @@
 
     <script src="{{ url_for('static', filename='leaflet/leaflet.js') }}"></script>
     <script src="{{ url_for('static', filename='tracking.js') }}?v=7"></script>
+    {% if not vault %}
     <script>
         (function () {
             if (typeof L === 'undefined') {
@@ -283,5 +388,6 @@
             }
         })();
     </script>
+    {% endif %}
 </body>
 </html>

@@ -769,4 +769,320 @@
     .track-search-form {
         flex-direction: column;
     }
+
+    .vault-ledger-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vault-asset-banner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .vault-hero-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* ==========================================================================
+   Vault client custody ledger (Brinks-style)
+   ========================================================================== */
+
+.vault-client-page {
+    background-color: #080f18;
+    background-image:
+        linear-gradient(rgba(8, 15, 24, 0.92), rgba(8, 15, 24, 0.97)),
+        url('images/vault.jpg');
+}
+
+.vault-hero {
+    position: relative;
+    min-height: 320px;
+    padding: 48px 24px 40px;
+    overflow: hidden;
+    border-bottom: 2px solid rgba(212, 175, 55, 0.35);
+}
+
+.vault-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.12), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(126, 184, 218, 0.08), transparent 40%),
+        linear-gradient(135deg, #0c1a2e 0%, #081422 55%, #120d04 100%);
+}
+
+.vault-gold-stack {
+    position: absolute;
+    right: 8%;
+    bottom: 18%;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    opacity: 0.55;
+    transform: rotate(-6deg);
+}
+
+.vault-gold-bar {
+    display: block;
+    width: 52px;
+    height: 22px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #f7e09b 0%, #d4af37 45%, #9a7b1a 100%);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.vault-gold-bar:nth-child(2) { height: 26px; }
+.vault-gold-bar:nth-child(3) { height: 30px; }
+.vault-gold-bar--small { width: 38px; height: 18px; opacity: 0.85; }
+
+.vault-gold-bar--ledger {
+    width: 44px;
+    height: 18px;
+}
+
+.vault-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+}
+
+.vault-hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #c5a028;
+    margin: 0 0 10px;
+}
+
+.vault-hero-title {
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #f0f6fb;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+}
+
+.vault-hero-sub {
+    font-size: 13px;
+    color: #8eb8d4;
+    margin: 0 0 20px;
+}
+
+.vault-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 12px;
+    color: #6a8fa8;
+    letter-spacing: 0.5px;
+}
+
+.vault-hero-meta strong {
+    color: #d4af37;
+    margin-left: 6px;
+}
+
+.vault-ledger {
+    background: rgba(8, 18, 32, 0.72);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: 6px;
+    padding: 28px 24px 24px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.vault-ledger-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(126, 184, 218, 0.15);
+}
+
+.vault-ledger-eyebrow {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #7eb8da;
+    margin: 0 0 6px;
+}
+
+.vault-ledger-header h2 {
+    font-size: 22px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #e8c547;
+    margin: 0 0 6px;
+}
+
+.vault-ledger-ref {
+    font-size: 11px;
+    color: #6a8fa8;
+    margin: 0;
+    font-family: monospace;
+}
+
+.vault-status-badge {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    border-radius: 4px;
+    text-align: right;
+    max-width: 220px;
+    line-height: 1.45;
+    border: 1px solid rgba(255, 180, 60, 0.45);
+    color: #ffb84d;
+    background: rgba(255, 120, 40, 0.08);
+}
+
+.vault-status-badge--past-due {
+    border-color: rgba(255, 100, 60, 0.5);
+    color: #ff9a6a;
+}
+
+.vault-asset-banner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 22px;
+    margin-bottom: 24px;
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.1), rgba(8, 18, 32, 0.4));
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 4px;
+}
+
+.vault-asset-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.vault-asset-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6a8fa8;
+    margin: 0 0 4px;
+}
+
+.vault-asset-banner h3 {
+    font-size: 20px;
+    color: #f0f6fb;
+    margin: 0 0 4px;
+}
+
+.vault-asset-meta {
+    font-size: 12px;
+    color: #8eb8d4;
+    margin: 0;
+}
+
+.vault-asset-value {
+    margin-left: auto;
+    text-align: right;
+}
+
+.vault-asset-value span {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #6a8fa8;
+    margin-bottom: 4px;
+}
+
+.vault-asset-value strong {
+    font-size: 18px;
+    color: #e8c547;
+}
+
+.vault-ledger-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.vault-ledger-section {
+    background: rgba(6, 14, 26, 0.65);
+    border: 1px solid rgba(126, 184, 218, 0.12);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.vault-ledger-section h4 {
+    margin: 0;
+    padding: 12px 16px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #9ec5e8;
+    background: rgba(126, 184, 218, 0.08);
+    border-bottom: 1px solid rgba(126, 184, 218, 0.12);
+}
+
+.vault-ledger-rows {
+    padding: 4px 0;
+}
+
+.vault-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(126, 184, 218, 0.06);
+    font-size: 13px;
+}
+
+.vault-row:last-child {
+    border-bottom: none;
+}
+
+.vault-row span {
+    color: #6a8fa8;
+    flex-shrink: 0;
+}
+
+.vault-row strong {
+    color: #d4e8f7;
+    font-weight: 600;
+    text-align: right;
+}
+
+.vault-row em {
+    font-style: normal;
+    font-size: 11px;
+    color: #5a7f98;
+    text-align: right;
+    width: 100%;
+}
+
+.vault-row--sub {
+    padding-top: 0;
+    margin-top: -6px;
+}
+
+.vault-text-warn {
+    color: #ffb84d !important;
+}
+
+.vault-ledger-footer {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(126, 184, 218, 0.12);
+}
+
+.vault-ledger-footer p {
+    font-size: 11px;
+    line-height: 1.6;
+    color: #5a7f98;
+    margin: 0 0 10px;
 }

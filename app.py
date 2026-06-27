@@ -24,6 +24,7 @@ from shipments_store import (
     valid_codes,
     normalize_code,
 )
+from vault_store import get_vault, is_vault_code
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -156,6 +157,17 @@ def track():
     from shipments_store import FREIGHT_DEFAULTS, _enrich_shipment
 
     code = request.args.get('code', '').strip().upper()
+    vault = get_vault(code) if code else None
+    if vault:
+        return render_template(
+            'track.html',
+            code=code,
+            vault=vault,
+            shipment=None,
+            site_port=SITE_PORT,
+            show_port_warning=IS_LOCAL,
+        )
+
     shipment = get_shipment(code) if code else None
     if code and not shipment:
         shipment = _enrich_shipment({
@@ -171,10 +183,19 @@ def track():
     return render_template(
         'track.html',
         code=code,
+        vault=None,
         shipment=shipment,
         site_port=SITE_PORT,
         show_port_warning=IS_LOCAL,
     )
+
+
+@app.route('/api/vault/<code>', methods=['GET'])
+def api_get_vault(code):
+    record = get_vault(code)
+    if not record:
+        abort(404)
+    return jsonify(record)
 
 
 @app.route('/api/shipments/<code>', methods=['GET'])

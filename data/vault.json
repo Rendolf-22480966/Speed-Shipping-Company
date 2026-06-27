@@ -1,0 +1,30 @@
+{
+  "CG201609SP": {
+    "tracking_code": "CG201609SP",
+    "transaction_code": "CGS/XXT/2016/00",
+    "depositor_name": "Mr David Durham",
+    "depositor_title": "Male · Primary Depositor",
+    "next_of_kin": "Mrs Debbie Durham",
+    "next_of_kin_title": "Female · Registered Next of Kin",
+    "deposit_date": "16 January 2016",
+    "item_deposited": "120kg Gold Bars",
+    "item_weight": "120kg",
+    "item_class": "Allocated Bullion — Class I",
+    "deposit_purpose": "Safe Keeping",
+    "monthly_charge": "£215.00",
+    "agent_name": "Michael William",
+    "vault_number": "SSSC-534-DE210",
+    "agent_id": "SSSC-U202",
+    "membership_type": "Gold",
+    "insurance": "Full Coverage",
+    "account_status": "Past Due · Rollover Protection Active",
+    "account_status_class": "past-due",
+    "outstanding_clearance_fee": "£20,375.00",
+    "valuation_reference": "$12.7 Million",
+    "recent_payment_date": "16 January 2016",
+    "recent_payment_source": "Bank of America",
+    "receipt_number": "367954091112",
+    "custody_location": "Speed-Shipping Secure Vault — Tier IV Bullion Wing",
+    "ledger_reference": "SSSC-VLT-2016-CG201609SP"
+  }
+}
