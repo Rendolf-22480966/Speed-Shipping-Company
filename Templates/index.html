@@ -18,6 +18,30 @@
 </head>
 <body>
 
+    <!-- TOP TRACKING BAR (Brinks-style — always visible at top) -->
+    <div class="top-track-bar" id="tracking" role="search" aria-label="Shipment tracking">
+        <div class="top-track-inner">
+            <div class="top-track-label">
+                <span class="top-track-icon" aria-hidden="true">&#128269;</span>
+                <span class="top-track-title">Track Your Shipment</span>
+            </div>
+            <form class="top-track-form tracking-form" onsubmit="trackShipment(); return false;">
+                <div class="input-wrapper top-track-input-wrap">
+                    <label for="trackingInput" class="sr-only">Tracking number</label>
+                    <input
+                        type="text"
+                        id="trackingInput"
+                        name="tracking_number"
+                        placeholder="Enter tracking number"
+                        required
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="tracking-btn top-track-submit">Track</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- THE SLIDING SIDEBAR MENU (From the video) -->
     <aside class="sliding-menu" id="sideMenu">
         <div class="menu-header">
@@ -30,7 +54,7 @@
             <li class="menu-item" data-target="industries">INDUSTRIES</li>
             <li class="menu-item" data-target="network">NETWORK</li>
             <li class="menu-item" data-target="contact">CONTACT US</li>
-            <li class="menu-item"><a href="{{ url_for('login') }}" style="color:inherit;text-decoration:none;">OFFICER LOGIN</a></li>
+            <li class="menu-item"><a href="{{ url_for('admin') }}" style="color:inherit;text-decoration:none;">OFFICER LOGIN</a></li>
         </ul>
         <div class="sidebar-footer">
             <button class="track-btn" data-target="tracking">TRACK</button>
@@ -47,7 +71,8 @@
         <nav class="premium-nav">
             <div class="logo">SPEED-SHIPPING AND SECURITY COMPANY</div>
             <div class="nav-actions">
-                <a href="{{ url_for('login') }}" class="nav-login">Officer Login</a>
+                <button type="button" class="nav-track-link" data-target="tracking">Track</button>
+                <a href="{{ url_for('admin') }}" class="nav-login">Officer Login</a>
                 <div class="menu-toggle" id="menuToggle">
                     <span></span>
                     <span></span>
@@ -382,22 +407,15 @@
         </div>
     </section>
 
-    <!-- SECURE REAL-TIME TRACKING PORTAL CONTAINER -->
-    <section class="secure-tracking-portal" id="tracking">
-        <div class="tracking-container">
+    <!-- LIVE TRACKING INFO (form is in the top bar) -->
+    <section class="secure-tracking-portal secure-tracking-portal--info">
+        <div class="tracking-container tracking-container--compact">
             <div class="security-badge">
                 <span class="lock-icon">🔒</span> END-TO-END SECURE ENCRYPTION
             </div>
-            <h2>ASSET MANAGEMENT & TRACKING</h2>
-            <p>Input your tracking code below — a live GPS map opens at the top of the tracking page, updating automatically when officers sync new coordinates.</p>
-            
-            <form class="tracking-form" onsubmit="trackShipment(); return false;">
-                <div class="input-wrapper">
-                    <input type="text" id="trackingInput" name="tracking_number" placeholder="ENTER YOUR TRACKING CODE" required autocomplete="off">
-                    <button type="submit" class="tracking-btn">TRACK ON LIVE MAP</button>
-                </div>
-            </form>
-            <p class="tracking-hint">Enter your secure tracking reference to view live shipment status on the map.</p>
+            <h2>LIVE ASSET TRACKING</h2>
+            <p>Use the <strong>Track Your Shipment</strong> bar at the top of the page. Enter your reference to open the live GPS map, secure consignment ledger, and freight details.</p>
+            <button type="button" class="tracking-btn tracking-btn--outline" data-target="tracking">Go to Tracking Bar</button>
         </div>
     </section>
 
@@ -443,7 +461,7 @@
                 <a href="#industries" data-target="industries">Industries</a>
                 <a href="#network" data-target="network">Global Network</a>
                 <a href="#contact" data-target="contact">Contact</a>
-                <a href="{{ url_for('login') }}">Officer Login</a>
+                <a href="{{ url_for('admin') }}">Officer Login</a>
             </div>
             <div>
                 <h4>Track</h4>
@@ -488,11 +506,20 @@
         function trackShipment() {
             let inputCode = document.getElementById("trackingInput").value.trim().toUpperCase();
             if (!inputCode) {
-                alert("Please enter a valid shipping reference code.");
+                document.getElementById("trackingInput").focus();
                 return;
             }
             window.location.href = "{{ url_for('track') }}?code=" + encodeURIComponent(inputCode);
         }
+
+        document.querySelectorAll('[data-target="tracking"]').forEach(function (el) {
+            el.addEventListener('click', function () {
+                var input = document.getElementById('trackingInput');
+                if (input) {
+                    setTimeout(function () { input.focus(); }, 400);
+                }
+            });
+        });
     </script>
 </body>
 </html>

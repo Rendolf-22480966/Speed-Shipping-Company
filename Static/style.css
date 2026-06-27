@@ -10,6 +10,146 @@ body {
     background-color: #000000;
     color: #ffffff;
     overflow-x: hidden;
+    padding-top: 58px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* Brinks-style top tracking bar */
+.top-track-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    background: linear-gradient(180deg, #0c1a2e 0%, #081422 100%);
+    border-bottom: 2px solid rgba(212, 175, 55, 0.45);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+
+.top-track-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.top-track-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.top-track-icon {
+    font-size: 14px;
+    line-height: 1;
+    opacity: 0.9;
+}
+
+.top-track-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #d4af37;
+    white-space: nowrap;
+}
+
+.top-track-form {
+    flex: 1;
+    min-width: 0;
+}
+
+.top-track-input-wrap input {
+    text-align: left;
+    padding: 12px 16px;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.top-track-input-wrap input:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.25);
+}
+
+.top-track-submit {
+    padding: 12px 28px;
+    width: auto;
+    min-width: 120px;
+    flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+    body {
+        padding-top: 52px;
+    }
+
+    .top-track-inner {
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+        padding: 8px 24px;
+    }
+
+    .top-track-input-wrap {
+        flex-direction: row;
+        gap: 0;
+    }
+
+    .top-track-input-wrap input {
+        border-right: none;
+        border-radius: 4px 0 0 4px;
+    }
+
+    .top-track-submit {
+        border-radius: 0 4px 4px 0;
+        width: 140px;
+    }
+}
+
+.secure-tracking-portal--info {
+    padding: 48px 20px;
+}
+
+.tracking-container--compact {
+    max-width: 720px;
+    padding: 32px 28px;
+}
+
+.tracking-container--compact p {
+    margin-bottom: 24px;
+}
+
+.tracking-container--compact p strong {
+    color: #d4af37;
+}
+
+.tracking-btn--outline {
+    width: auto;
+    display: inline-block;
+    padding: 14px 32px;
+    background: transparent;
+    border: 1px solid #d4af37;
+    color: #d4af37;
+    box-shadow: none;
+}
+
+.tracking-btn--outline:hover {
+    background: #d4af37;
+    color: #000;
 }
 
 /* HERO CONTAINER */
@@ -1158,6 +1298,26 @@ html.is-loaded body {
     display: flex;
     align-items: center;
     gap: 18px;
+}
+
+.nav-track-link {
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #d4af37;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.55);
+    padding: 9px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-track-link:hover {
+    background: rgba(212, 175, 55, 0.12);
+    color: #f7e09b;
 }
 
 .nav-login {

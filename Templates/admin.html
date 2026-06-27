@@ -84,7 +84,7 @@
 
         {% if user %}<span class="admin-user">Signed in as {{ user }}</span>{% endif %}
 
-        <a href="{{ url_for('track', code='SSS-0001') }}" class="admin-link" target="_blank">Preview Tracker</a>
+        <a href="{{ url_for('track', code=default_tracking_code) }}" class="admin-link" target="_blank">Preview Tracker</a>
 
         <a href="{{ url_for('home') }}" class="admin-link">View Site</a>
 
@@ -110,7 +110,7 @@
 
                 <label>Tracking Reference Number</label>
 
-                <input type="text" id="tracking_number" placeholder="e.g., GBX-2026-458721" required>
+                <input type="text" id="tracking_number" placeholder="e.g., SS3409536472" value="{{ default_tracking_code }}" required>
 
             </div>
 
@@ -444,20 +444,27 @@
 
 
     document.getElementById('loadExistingBtn').addEventListener('click', () => {
-
-        const code = document.getElementById('tracking_number').value.trim().toUpperCase();
-
-        if (!code) { alert('Enter a tracking number first.'); return; }
-
-        fetch('/api/shipments/' + encodeURIComponent(code))
-
-            .then(r => r.ok ? r.json() : Promise.reject())
-
-            .then(fillForm)
-
-            .catch(() => alert('Shipment not found in ledger.'));
-
+        loadShipment(document.getElementById('tracking_number').value);
     });
+
+
+
+    function loadShipment(code) {
+        const trackingCode = (code || '').trim().toUpperCase();
+        if (!trackingCode) {
+            alert('Enter a tracking number first.');
+            return;
+        }
+        document.getElementById('tracking_number').value = trackingCode;
+        fetch('/api/shipments/' + encodeURIComponent(trackingCode), { credentials: 'same-origin' })
+            .then(r => r.ok ? r.json() : Promise.reject())
+            .then(fillForm)
+            .catch(() => alert('Shipment not found in ledger.'));
+    }
+
+
+
+    loadShipment({{ default_tracking_code|tojson }});
 
 
 

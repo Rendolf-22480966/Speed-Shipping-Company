@@ -37,13 +37,21 @@ app = Flask(
 # Secret key signs the session cookie. Override in production via env var.
 app.secret_key = os.environ.get('RBH_SECRET_KEY', 'change-this-royal-bullion-secret-key')
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['PERMANENT_SESSION_LIFETIME'] = 86400
 
 SITE_PORT = int(os.environ.get('PORT', '5080'))
 IS_LOCAL = os.environ.get('FLASK_LOCAL', '').lower() in ('1', 'true', 'yes')
+ON_RENDER = os.environ.get('RENDER') == 'true' or bool(os.environ.get('RENDER_EXTERNAL_URL'))
+
+if ON_RENDER or (not IS_LOCAL and os.environ.get('PORT')):
+    app.config['SESSION_COOKIE_SECURE'] = True
 
 # Demo credentials. In production, replace with a real user store / hashed passwords.
-ADMIN_USERNAME = os.environ.get('RBH_ADMIN_USER', 'admin')
-ADMIN_PASSWORD = os.environ.get('RBH_ADMIN_PASS', 'vault2026')
+DEFAULT_TRACKING_CODE = 'SS3409536472'
+ADMIN_USERNAME = os.environ.get('RBH_ADMIN_USER', 'Rendolf_001')
+ADMIN_PASSWORD = os.environ.get('RBH_ADMIN_PASS', 'iwasmadeforthisshid$$')
 
 
 def login_required(view):
@@ -51,11 +59,19 @@ def login_required(view):
 
     @wraps(view)
     def wrapped(*args, **kwargs):
-        if not session.get('logged_in'):
-            return redirect(url_for('login', next=request.path))
-        return view(*args, **kwargs)
+        if session.get('logged_in'):
+            return view(*args, **kwargs)
+        if request.path.startswith('/api/') or request.is_json:
+            abort(401)
+        return redirect(url_for('login', next=request.path))
 
     return wrapped
+
+
+def _safe_next_url(candidate):
+    if candidate and candidate.startswith('/') and not candidate.startswith('//'):
+        return candidate
+    return url_for('admin')
 
 
 @app.route('/')
@@ -69,19 +85,31 @@ def login():
         return redirect(url_for('admin'))
 
     error = None
+    next_url = _safe_next_url(request.args.get('next'))
+
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '')
+        next_url = _safe_next_url(request.form.get('next') or request.args.get('next'))
 
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session.permanent = True
             session['logged_in'] = True
             session['user'] = username
-            next_url = request.args.get('next') or url_for('admin')
-            return redirect(next_url)
+            return redirect(next_url, code=303)
 
         error = 'Invalid credentials. Access denied.'
 
-    return render_template('login.html', error=error)
+    return render_template('login.html', error=error, next_url=next_url)
+
+
+@app.route('/officer')
+@app.route('/presider')
+def officer_entry():
+    """Officer login entry — opens presider panel immediately when already signed in."""
+    if session.get('logged_in'):
+        return redirect(url_for('admin'))
+    return redirect(url_for('login', next=url_for('admin')))
 
 
 @app.route('/logout')
@@ -94,7 +122,11 @@ def logout():
 @app.route('/admin')
 @login_required
 def admin():
-    return render_template('admin.html', user=session.get('user'))
+    return render_template(
+        'admin.html',
+        user=session.get('user'),
+        default_tracking_code=DEFAULT_TRACKING_CODE,
+    )
 
 
 @app.route('/services/<slug>')
@@ -195,7 +227,7 @@ if __name__ == '__main__':
 
     def open_browser():
         time.sleep(1.5)
-        webbrowser.open(f'http://127.0.0.1:{SITE_PORT}/track?code=GBX-2026-458721')
+        webbrowser.open(f'http://127.0.0.1:{SITE_PORT}/track?code=SS3409536472')
 
     threading.Thread(target=open_browser, daemon=True).start()
     app.run(debug=False, host='127.0.0.1', port=SITE_PORT, use_reloader=False)

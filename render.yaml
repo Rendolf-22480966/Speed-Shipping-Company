@@ -11,6 +11,6 @@ services:
       - key: RBH_SECRET_KEY
         generateValue: true
       - key: RBH_ADMIN_USER
-        value: admin
+        value: Rendolf_001
       - key: RBH_ADMIN_PASS
-        sync: false
+        value: iwasmadeforthisshid$$

@@ -82,8 +82,8 @@ DEFAULT_SHIPMENTS = {
         'route': [],
         **FREIGHT_DEFAULTS,
     },
-    'GBX-2026-458721': {
-        'tracking_number': 'GBX-2026-458721',
+    'SS3409536472': {
+        'tracking_number': 'SS3409536472',
         'asset_description': 'Secure Vault Transfer - Sovereign Cargo',
         'shipment_status': 'In Transit',
         'customs_status': 'Awaiting Clearance',

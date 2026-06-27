@@ -78,7 +78,7 @@ echo.
 
 
 
-echo  Officer panel login: admin / vault2026
+echo  Officer panel login: Rendolf_001
 
 
 
@@ -202,7 +202,7 @@ echo  *** USE THIS LINK ONLY (port 5080) ***
 
 
 
-echo  Tracking:  http://127.0.0.1:5080/track?code=GBX-2026-458721
+echo  Tracking:  http://127.0.0.1:5080/track?code=SS3409536472
 
 
 
@@ -218,7 +218,7 @@ echo.
 
 
 
-start /MIN cmd /c "timeout /t 4 /nobreak >nul && start "" "http://127.0.0.1:5080/track?code=GBX-2026-458721""
+start /MIN cmd /c "timeout /t 4 /nobreak >nul && start "" "http://127.0.0.1:5080/track?code=SS3409536472""
 
 
 
