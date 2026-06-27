@@ -18,22 +18,21 @@
 </head>
 <body>
 
-    <!-- TOP TRACKING BAR (Brinks-style — always visible at top) -->
-    <div class="top-track-bar" id="tracking" role="search" aria-label="Shipment tracking">
+    <!-- Desktop-only fixed tracking strip (hidden on phone) -->
+    <div class="top-track-bar" id="trackingDesktop" role="search" aria-label="Shipment tracking">
         <div class="top-track-inner">
             <div class="top-track-label">
                 <span class="top-track-icon" aria-hidden="true">&#128269;</span>
                 <span class="top-track-title">Track Your Shipment</span>
             </div>
-            <form class="top-track-form tracking-form" onsubmit="trackShipment(); return false;">
+            <form class="top-track-form tracking-form top-track-form--desktop" onsubmit="trackShipment(); return false;">
                 <div class="input-wrapper top-track-input-wrap">
-                    <label for="trackingInput" class="sr-only">Tracking number</label>
+                    <label for="trackingInputDesktop" class="sr-only">Tracking number</label>
                     <input
                         type="text"
-                        id="trackingInput"
+                        id="trackingInputDesktop"
                         name="tracking_number"
                         placeholder="Tracking code"
-                        required
                         autocomplete="off"
                     >
                     <button type="submit" class="tracking-btn top-track-submit">Track</button>
@@ -71,7 +70,18 @@
         <nav class="premium-nav">
             <div class="logo">SPEED-SHIPPING AND SECURITY COMPANY</div>
             <div class="nav-actions">
-                <button type="button" class="nav-track-link" data-target="tracking">Track</button>
+                <form class="nav-track-form tracking-form" id="tracking" onsubmit="trackShipment(); return false;" aria-label="Track shipment">
+                    <label for="trackingInput" class="sr-only">Tracking code</label>
+                    <input
+                        type="text"
+                        id="trackingInput"
+                        name="tracking_number"
+                        class="nav-track-input"
+                        placeholder="Code"
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="nav-track-submit">Track</button>
+                </form>
                 <a href="{{ url_for('admin') }}" class="nav-login">Officer Login</a>
                 <div class="menu-toggle" id="menuToggle">
                     <span></span>
@@ -504,9 +514,13 @@
 
         // Redirect to dedicated live-map tracking page
         function trackShipment() {
-            let inputCode = document.getElementById("trackingInput").value.trim().toUpperCase();
+            var isMobile = window.matchMedia('(max-width: 767px)').matches;
+            var activeInput = isMobile
+                ? document.getElementById('trackingInput')
+                : document.getElementById('trackingInputDesktop');
+            var inputCode = (activeInput && activeInput.value ? activeInput.value : '').trim().toUpperCase();
             if (!inputCode) {
-                document.getElementById("trackingInput").focus();
+                if (activeInput) activeInput.focus();
                 return;
             }
             window.location.href = "{{ url_for('track') }}?code=" + encodeURIComponent(inputCode);
@@ -514,7 +528,10 @@
 
         document.querySelectorAll('[data-target="tracking"]').forEach(function (el) {
             el.addEventListener('click', function () {
-                var input = document.getElementById('trackingInput');
+                var isMobile = window.matchMedia('(max-width: 767px)').matches;
+                var input = isMobile
+                    ? document.getElementById('trackingInput')
+                    : document.getElementById('trackingInputDesktop');
                 if (input) {
                     setTimeout(function () { input.focus(); }, 400);
                 }

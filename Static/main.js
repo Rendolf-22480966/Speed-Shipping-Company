@@ -102,6 +102,9 @@
     document.querySelectorAll('[data-target]').forEach(function (el) {
       el.addEventListener('click', function (e) {
         var id = el.getAttribute('data-target');
+        if (id === 'tracking') {
+          id = window.matchMedia('(min-width: 768px)').matches ? 'trackingDesktop' : 'tracking';
+        }
         var target = document.getElementById(id);
         if (!target) return;
         e.preventDefault();
