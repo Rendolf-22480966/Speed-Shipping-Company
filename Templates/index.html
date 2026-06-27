@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed-Shipping and Security Company</title>
+    
+    <!-- Premium Luxury Typography Imports -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Interactive map engine (Leaflet + OpenStreetMap) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Link to our Style Sheet inside the Static folder -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- THE SLIDING SIDEBAR MENU (From the video) -->
+    <aside class="sliding-menu" id="sideMenu">
+        <div class="menu-header">
+            <div class="close-btn" id="closeMenu">&times;</div>
+        </div>
+        <ul class="menu-links">
+            <li class="menu-item active" data-target="solutions">SERVICES</li>
+            <li class="menu-item" data-target="about">ABOUT US</li>
+            <li class="menu-item" data-target="cash-mailing">CASH MAILING</li>
+            <li class="menu-item" data-target="industries">INDUSTRIES</li>
+            <li class="menu-item" data-target="network">NETWORK</li>
+            <li class="menu-item" data-target="contact">CONTACT US</li>
+            <li class="menu-item"><a href="{{ url_for('login') }}" style="color:inherit;text-decoration:none;">OFFICER LOGIN</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <button class="track-btn" data-target="tracking">TRACK</button>
+        </div>
+    </aside>
+
+    <!-- MAIN PAGE WRAPPER -->
+    <div class="page-wrapper" id="mainWrapper">
+
+    <!-- HERO SPLASH SECTION -->
+    <header class="luxury-hero">
+        
+        <!-- Minimalist Navigation Header -->
+        <nav class="premium-nav">
+            <div class="logo">SPEED-SHIPPING AND SECURITY COMPANY</div>
+            <div class="nav-actions">
+                <a href="{{ url_for('login') }}" class="nav-login">Officer Login</a>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Floating luxury motion decorations -->
+        <div class="hero-motion-layer">
+            <span class="motion-piece floating-ship"></span>
+            <span class="motion-piece floating-jewel"></span>
+            <span class="motion-piece floating-vessel"></span>
+            <span class="motion-piece floating-spark"></span>
+            <span class="motion-piece floating-lens"></span>
+            <span class="motion-piece floating-gem"></span>
+        </div>
+
+        <!-- Bold Center Headline -->
+        <div class="hero-content">
+            <p class="hero-credentials">Safe Deposit &middot; Confidential &middot; Securities &middot; Accredited Clearing</p>
+            <h1>DELIVERING <br><span class="outline-text">ABSOLUTE</span> <br>PEACE OF MIND.</h1>
+            <div class="scroll-arrow"></div>
+        </div>
+
+    </header>
+
+    <!-- LIVE ADVERTS / PROMOTIONS CAROUSEL -->
+    <section class="live-adverts">
+        <div class="adverts-head">
+            <span class="live-dot"></span>
+            <span>Live Updates &amp; Announcements</span>
+        </div>
+        <div class="advert-track" id="advertTrack">
+            <div class="advert-slide active">
+                <div class="advert-icon">&#128666;</div>
+                <div class="advert-copy">
+                    <h3>Armored Cash-in-Transit Now in 40+ Cities</h3>
+                    <p>Same-day insured pickup and delivery of banknotes and high-value cargo with GPS-tracked armored fleets and vetted security crews.</p>
+                </div>
+                <span class="advert-tag">New Route</span>
+            </div>
+            <div class="advert-slide">
+                <div class="advert-icon">&#9993;</div>
+                <div class="advert-copy">
+                    <h3>Secure Cash Mailing &mdash; Fully Insured</h3>
+                    <p>Send and receive sealed, tamper-evident cash parcels nationwide with end-to-end custody tracking and underwriter protection.</p>
+                </div>
+                <span class="advert-tag">Featured</span>
+            </div>
+            <div class="advert-slide">
+                <div class="advert-icon">&#127974;</div>
+                <div class="advert-copy">
+                    <h3>Vault Custody Rates Reduced This Quarter</h3>
+                    <p>Allocated and segregated storage for bullion, diamonds and fine art in Grade-AAA vaults across Zurich, Dubai and Singapore.</p>
+                </div>
+                <span class="advert-tag">Promo</span>
+            </div>
+            <div class="advert-slide">
+                <div class="advert-icon">&#128179;</div>
+                <div class="advert-copy">
+                    <h3>Smart-Safe &amp; ATM Replenishment Programs</h3>
+                    <p>Automated cash recycling, provisional credit and 24/7 ATM servicing keep your liquidity moving without the manual overhead.</p>
+                </div>
+                <span class="advert-tag">Service</span>
+            </div>
+        </div>
+        <div class="advert-dots" id="advertDots"></div>
+    </section>
+
+    <!-- ABOUT US INTRO SECTION -->
+    <section class="luxury-about" id="about">
+        <div class="about-layout">
+            <div class="about-photo" aria-hidden="true"></div>
+            <div class="about-content">
+                <h2>ABOUT US</h2>
+                <p>Speed-Shipping and Security Company delivers safe deposit, confidential custody, securities logistics and accredited clearing for banks, institutions and private clients worldwide. Our specialists in armored transport, vaulting and special operations provide a smooth, expedient service tailored to your exact requirements.</p>
+                <p class="about-address">Shoreham Road East, Hounslow, Middlesex, TW6 3UA</p>
+                <a href="#solutions" class="gold-btn" data-target="solutions">Explore Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PREMIUM GRAPHICAL SERVICES GRID (From Image_21.png & Image_24.png) -->
+    <section class="services-grid">
+        
+        <!-- Card 1: Precious Metals -->
+        <div class="service-card metal-bg">
+            <div class="card-overlay">
+                <h2>PRECIOUS METALS</h2>
+            </div>
+        </div>
+
+        <!-- Card 2: Diamonds & Jewellery -->
+        <div class="service-card diamond-bg">
+            <div class="card-overlay">
+                <h2>DIAMONDS & JEWELLERY</h2>
+            </div>
+        </div>
+
+        <!-- Card 3: Vaulting Facilities -->
+        <div class="service-card vault-bg">
+            <div class="card-overlay">
+                <h2>VAULTING FACILITIES</h2>
+            </div>
+        </div>
+
+        <!-- Card 4: Special Operations (From Image_17.png) -->
+        <div class="service-card special-bg">
+            <div class="card-overlay">
+                <h2>SPECIAL OPERATIONS</h2>
+            </div>
+        </div>
+
+        <!-- Card 5: Digital Asset Services (From Image_19.png) -->
+        <div class="service-card crypto-bg">
+            <div class="card-overlay">
+                <h2>DIGITAL ASSET SERVICES</h2>
+            </div>
+        </div>
+
+        <!-- Card 6: Fine Art Global (From Image_21.png) -->
+        <div class="service-card art-bg">
+            <div class="card-overlay">
+                <h2>FINE ART GLOBAL</h2>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- EXPANDED SOLUTIONS GRID (Brink's-style services in our own brand) -->
+    <section class="solutions" id="solutions">
+        <div class="section-head">
+            <div class="eyebrow">What We Do</div>
+            <h2>Secure Logistics Solutions</h2>
+            <p>End-to-end protection for cash, valuables and critical assets &mdash; engineered for banks, retailers, mints and high-net-worth clients.</p>
+        </div>
+        <div class="solutions-grid">
+            <a href="{{ url_for('service_detail', slug='cash-in-transit') }}" class="solution-card sol-cit-bg solution-card-link">
+                <div class="solution-overlay">
+                    <h3>Cash-in-Transit</h3>
+                    <p>Armored vehicle pickup and delivery of banknotes, coin and valuables with armed, vetted crews and real-time GPS custody tracking.</p>
+                </div>
+            </a>
+            <a href="{{ url_for('service_detail', slug='cash-management') }}" class="solution-card sol-cash-mgmt-bg solution-card-link">
+                <div class="solution-overlay">
+                    <h3>Cash Management</h3>
+                    <p>Complete physical cash handling — counting, verification, sorting, authentication, storage, and deposit preparation.</p>
+                </div>
+            </a>
+            <a href="{{ url_for('service_detail', slug='secure-cash-mailing') }}" class="solution-card sol-cash-mail-bg solution-card-link">
+                <div class="solution-overlay">
+                    <h3>Secure Cash Mailing</h3>
+                    <p>Protected shipment of cash, drafts, and negotiable instruments with tamper-evident packaging and chain-of-custody.</p>
+                </div>
+            </a>
+            <a href="{{ url_for('service_detail', slug='atm-services') }}" class="solution-card sol-atm-bg solution-card-link">
+                <div class="solution-overlay">
+                    <h3>ATM Services</h3>
+                    <p>Cash replenishment, balancing, maintenance coordination, first-line support, and monitoring for ATM networks.</p>
+                </div>
+            </a>
+            <a href="{{ url_for('service_detail', slug='vaulting-custody') }}" class="solution-card sol-vaulting-bg solution-card-link">
+                <div class="solution-overlay">
+                    <h3>Vaulting &amp; Custody</h3>
+                    <p>Highly secure vault storage for bullion, cash reserves, jewellery, fine art, and confidential documents.</p>
+                </div>
+            </a>
+            <a href="{{ url_for('service_detail', slug='precious-goods-transport') }}" class="solution-card sol-precious-bg solution-card-link">
+                <div class="solution-overlay">
+                    <h3>Precious Goods Transport</h3>
+                    <p>Specialist transport for gold, diamonds, luxury watches, fine art, and collectibles with full chain-of-custody.</p>
+                </div>
+            </a>
+            <a href="{{ url_for('service_detail', slug='payment-digital-services') }}" class="solution-card sol-digital-bg solution-card-link">
+                <div class="solution-overlay">
+                    <h3>Payment &amp; Digital Services</h3>
+                    <p>Digital payment tools, cash reporting dashboards, shipment tracking, and business analytics for treasury teams.</p>
+                </div>
+            </a>
+            <a href="{{ url_for('service_detail', slug='risk-special-operations') }}" class="solution-card sol-risk-bg solution-card-link">
+                <div class="solution-overlay">
+                    <h3>Risk &amp; Special Operations</h3>
+                    <p>Custom security and logistics for large cash movements, event management, emergency response, and high-risk assignments.</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- INDUSTRIES WE SERVE -->
+    <section class="industries" id="industries">
+        <div class="section-head">
+            <div class="eyebrow">Who We Protect</div>
+            <h2>Industries We Serve</h2>
+            <p>Trusted by sovereign institutions, private wealth and the world&rsquo;s most discerning collectors &mdash; each engagement governed by bespoke custody protocols and absolute discretion.</p>
+        </div>
+
+        <div class="industries-grid">
+            <article class="industry-card ind-central-banks">
+                <div class="industry-overlay">
+                    <span class="industry-tag">Sovereign</span>
+                    <h3>Central Banks</h3>
+                    <p>Reserve movement, bullion custody and classified consignment handling for national monetary authorities.</p>
+                </div>
+            </article>
+            <article class="industry-card ind-private-banks">
+                <div class="industry-overlay">
+                    <span class="industry-tag">Banking</span>
+                    <h3>Private Banks</h3>
+                    <p>White-glove logistics for UHNW client assets, vault transfers and insured cross-border settlements.</p>
+                </div>
+            </article>
+            <article class="industry-card ind-family-offices">
+                <div class="industry-overlay">
+                    <span class="industry-tag">Private Wealth</span>
+                    <h3>Billionaires &amp; Family Offices</h3>
+                    <p>Dedicated escort, segregated storage and confidential asset relocation for generational wealth structures.</p>
+                </div>
+            </article>
+            <article class="industry-card ind-watch-dealers">
+                <div class="industry-overlay">
+                    <span class="industry-tag">Horology</span>
+                    <h3>Luxury Watch Dealers</h3>
+                    <p>Tamper-evident transport and climate-controlled custody for high-value timepieces and rare collections.</p>
+                </div>
+            </article>
+            <article class="industry-card ind-bullion-traders">
+                <div class="industry-overlay">
+                    <span class="industry-tag">Bullion</span>
+                    <h3>Gold &amp; Bullion Traders</h3>
+                    <p>Armored chain-of-custody for ingots, coins and allocated metal between vaults and trading hubs.</p>
+                </div>
+            </article>
+            <article class="industry-card ind-diamond-merchants">
+                <div class="industry-overlay">
+                    <span class="industry-tag">Gemology</span>
+                    <h3>Diamond Merchants</h3>
+                    <p>Secure parcel routing, customs facilitation and insured carriage for certified stones and jewellery.</p>
+                </div>
+            </article>
+            <article class="industry-card ind-museums">
+                <div class="industry-overlay">
+                    <span class="industry-tag">Heritage</span>
+                    <h3>Museums</h3>
+                    <p>Museum-grade packing, climate monitoring and international loan exhibition logistics under strict provenance controls.</p>
+                </div>
+            </article>
+            <article class="industry-card ind-art-collectors">
+                <div class="industry-overlay">
+                    <span class="industry-tag">Fine Art</span>
+                    <h3>Fine Art Collectors</h3>
+                    <p>Climate-controlled transport, bonded storage and discreet delivery for paintings, sculpture and antiquities.</p>
+                </div>
+            </article>
+            <article class="industry-card ind-crypto-investors">
+                <div class="industry-overlay">
+                    <span class="industry-tag">Digital Assets</span>
+                    <h3>Cryptocurrency Investors</h3>
+                    <p>Physical hardware wallet vaulting, secure device transport and air-gapped custody for digital asset holders.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- TRUST / STATS BAND -->
+    <section class="stats-band">
+        <div class="stats-inner">
+            <div>
+                <div class="stat-num" data-count="40">0</div>
+                <div class="stat-label">Cities Served</div>
+            </div>
+            <div>
+                <div class="stat-num" data-count="100" data-suffix="+">0</div>
+                <div class="stat-label">Partner Countries</div>
+            </div>
+            <div>
+                <div class="stat-num" data-count="24" data-suffix="/7">0</div>
+                <div class="stat-label">Secure Monitoring</div>
+            </div>
+            <div>
+                <div class="stat-num" data-count="99" data-suffix="%">0</div>
+                <div class="stat-label">On-Time Custody</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GLOBAL NETWORK REGIONS SECTION (From Image_23.png & Image_18.png) -->
+    <section class="global-network" id="network">
+        <h2>GLOBAL NETWORK</h2>
+        <p>Our international base of offices, along with a global network of partners and affiliates, ensures a smooth, expedient and professional service tailored to your exact requirements. Our dedication to customer excellence results in a tailor-made solution specific to your exacting demands.</p>
+
+        <!-- Live interactive secure-hub map -->
+        <div class="network-map-wrap">
+            <div id="networkMap"></div>
+        </div>
+
+        <!-- Regional coverage accordion (countries expand on tap) -->
+        <div class="network-stack" id="networkAccordion" aria-label="Regional network coverage"></div>
+    </section>
+
+    <!-- SECURE CASH MAILING SECTION -->
+    <section class="cash-mailing" id="cash-mailing">
+        <div class="section-head">
+            <div class="eyebrow">Send Money Securely</div>
+            <h2>Secure Cash Mailing</h2>
+            <p>Move physical cash between cities and partners inside sealed, tamper-evident parcels &mdash; tracked at every node and protected by full insurance underwriting.</p>
+        </div>
+        <div class="mailing-steps">
+            <div class="mail-step">
+                <div class="step-num">1</div>
+                <h4>Book &amp; Declare</h4>
+                <p>Schedule a pickup and declare the value. We assign an insured custody reference and tamper-evident sealing kit.</p>
+            </div>
+            <div class="mail-step">
+                <div class="step-num">2</div>
+                <h4>Seal &amp; Collect</h4>
+                <p>A vetted agent collects the sealed parcel, scans it into custody and logs the origin node on the live ledger.</p>
+            </div>
+            <div class="mail-step">
+                <div class="step-num">3</div>
+                <h4>Track in Transit</h4>
+                <p>Follow every checkpoint in real time using your tracking code &mdash; from origin hub to destination vault.</p>
+            </div>
+            <div class="mail-step">
+                <div class="step-num">4</div>
+                <h4>Verified Delivery</h4>
+                <p>Recipient identity is verified, the seal integrity is confirmed, and custody is closed with a signed digital receipt.</p>
+            </div>
+        </div>
+        <div class="mailing-cta">
+            <a href="#tracking" class="gold-btn" data-target="tracking">Track a Cash Parcel</a>
+        </div>
+    </section>
+
+    <!-- SECURE REAL-TIME TRACKING PORTAL CONTAINER -->
+    <section class="secure-tracking-portal" id="tracking">
+        <div class="tracking-container">
+            <div class="security-badge">
+                <span class="lock-icon">🔒</span> END-TO-END SECURE ENCRYPTION
+            </div>
+            <h2>ASSET MANAGEMENT & TRACKING</h2>
+            <p>Input your tracking code below — a live GPS map opens at the top of the tracking page, updating automatically when officers sync new coordinates.</p>
+            
+            <form class="tracking-form" onsubmit="trackShipment(); return false;">
+                <div class="input-wrapper">
+                    <input type="text" id="trackingInput" name="tracking_number" placeholder="ENTER YOUR TRACKING CODE" required autocomplete="off">
+                    <button type="submit" class="tracking-btn">TRACK ON LIVE MAP</button>
+                </div>
+            </form>
+            <p class="tracking-hint">Enter your secure tracking reference to view live shipment status on the map.</p>
+        </div>
+    </section>
+
+    <!-- PREMIUM CONTACT FORM (From Image_18.png) -->
+    <section class="premium-contact" id="contact">
+        <h2>CONTACT US</h2>
+        <p class="contact-address">Speed-Shipping and Security Company<br>Shoreham Road East, Hounslow, Middlesex, TW6 3UA</p>
+        <form class="luxury-form" onsubmit="event.preventDefault();">
+            <div class="form-group">
+                <label for="client-name">Name</label>
+                <input type="text" id="client-name" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label for="client-email">Email</label>
+                <input type="email" id="client-email" placeholder="Enter your secure email address">
+            </div>
+            <div class="form-group">
+                <label for="client-company">Company Name</label>
+                <input type="text" id="client-company" placeholder="Enter company name (Optional)">
+            </div>
+            <button type="submit" class="gold-submit-btn">Submit Inquiry</button>
+        </form>
+    </section>
+
+    <!-- SITE FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">SPEED-SHIPPING AND SECURITY COMPANY</div>
+                <p class="footer-credentials">Safe Deposit &middot; Confidential &middot; Securities &middot; Accredited Clearing</p>
+                <p>Shoreham Road East, Hounslow, Middlesex, TW6 3UA</p>
+            </div>
+            <div>
+                <h4>Services</h4>
+                <a href="{{ url_for('service_detail', slug='cash-in-transit') }}">Cash-in-Transit</a>
+                <a href="{{ url_for('service_detail', slug='secure-cash-mailing') }}">Cash Mailing</a>
+                <a href="{{ url_for('service_detail', slug='atm-services') }}">ATM Services</a>
+                <a href="{{ url_for('service_detail', slug='vaulting-custody') }}">Vaulting &amp; Custody</a>
+            </div>
+            <div>
+                <h4>Company</h4>
+                <a href="#about" data-target="about">About Us</a>
+                <a href="#industries" data-target="industries">Industries</a>
+                <a href="#network" data-target="network">Global Network</a>
+                <a href="#contact" data-target="contact">Contact</a>
+                <a href="{{ url_for('login') }}">Officer Login</a>
+            </div>
+            <div>
+                <h4>Track</h4>
+                <a href="{{ url_for('track') }}">Track a Shipment</a>
+                <p>24/7 Secure Monitoring</p>
+                <p>support@speed-shipping-security.co.uk</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; <span id="footerYear"></span> Speed-Shipping and Security Company &mdash; Demonstration project. Not affiliated with any real security carrier.
+        </div>
+    </footer>
+
+    </div>
+
+    <!-- Map engine -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='network-regions.js') }}"></script>
+    <!-- Site interactions: carousel, map, smooth-scroll, counters, network accordion -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+
+    <!-- JAVASCRIPT ANIMATION LOGIC -->
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const sideMenu = document.getElementById('sideMenu');
+        const mainWrapper = document.getElementById('mainWrapper');
+
+        // When user clicks the menu bars, slide menu in and push page right
+        menuToggle.addEventListener('click', () => {
+            sideMenu.classList.add('open');
+            mainWrapper.classList.add('shift');
+        });
+
+        // When user clicks the 'X', slide it back away
+        closeMenu.addEventListener('click', () => {
+            sideMenu.classList.remove('open');
+            mainWrapper.classList.remove('shift');
+        });
+
+        // Redirect to dedicated live-map tracking page
+        function trackShipment() {
+            let inputCode = document.getElementById("trackingInput").value.trim().toUpperCase();
+            if (!inputCode) {
+                alert("Please enter a valid shipping reference code.");
+                return;
+            }
+            window.location.href = "{{ url_for('track') }}?code=" + encodeURIComponent(inputCode);
+        }
+    </script>
+</body>
+</html>

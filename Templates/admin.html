@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Vault Administration &middot; Speed-Shipping and Security Company</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        body { background: #0a0a0a; color: #fff; font-family: 'Montserrat', sans-serif; padding: 40px 20px; }
+
+        .admin-container { max-width: 760px; margin: 0 auto; background: #111; padding: 30px; border: 1px solid #d4af37; border-radius: 4px; }
+
+        h1 { color: #d4af37; font-size: 24px; letter-spacing: 2px; margin-bottom: 8px; border-bottom: 1px solid rgba(214,175,55,0.2); padding-bottom: 10px; }
+
+        .admin-subtitle { font-size: 12px; color: #666; letter-spacing: 1px; margin-bottom: 25px; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        @media(max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+        .form-group { display: flex; flex-direction: column; }
+
+        .form-group.full-width { grid-column: span 2; }
+
+        @media(max-width: 600px) { .form-group.full-width { grid-column: span 1; } }
+
+        .gps-section { grid-column: span 2; background: #0d0d0d; border: 1px solid #333; padding: 20px; border-radius: 4px; margin-bottom: 4px; }
+
+        @media(max-width: 600px) { .gps-section { grid-column: span 1; } }
+
+        .gps-section h2 { font-size: 12px; letter-spacing: 2px; color: #d4af37; margin: 0 0 16px; text-transform: uppercase; }
+
+        label { font-size: 11px; letter-spacing: 1px; color: #aaa; margin-bottom: 8px; text-transform: uppercase; }
+
+        input, textarea, select { background: #1a1a1a; border: 1px solid #333; padding: 12px; color: #fff; font-size: 14px; border-radius: 4px; transition: border 0.3s; }
+
+        input:focus, textarea:focus, select:focus { border-color: #d4af37; outline: none; }
+
+        input[type="date"] { color-scheme: dark; }
+
+        button { background: #d4af37; color: #000; font-weight: 700; border: none; padding: 15px; margin-top: 25px; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; width: 100%; transition: background 0.3s; }
+
+        button:hover { background: #fff; }
+
+        .btn-secondary { background: transparent; border: 1px solid #444; color: #aaa; margin-top: 12px; }
+
+        .btn-secondary:hover { border-color: #d4af37; color: #d4af37; background: transparent; }
+
+        #toast { text-align: center; margin-top: 15px; font-size: 13px; color: #00ff00; font-weight: 600; }
+
+        .admin-topbar { max-width: 760px; margin: 0 auto 18px auto; display: flex; justify-content: space-between; align-items: center; }
+
+        .admin-brand { color: #d4af37; font-size: 13px; letter-spacing: 3px; font-weight: 700; }
+
+        .admin-actions { display: flex; align-items: center; gap: 14px; }
+
+        .admin-user { font-size: 12px; letter-spacing: 1px; color: #888; }
+
+        .admin-link { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #d4af37; border: 1px solid rgba(214,175,55,0.4); padding: 8px 14px; border-radius: 4px; text-decoration: none; transition: all 0.3s; width: auto; margin: 0; }
+
+        .admin-link:hover { background: #d4af37; color: #000; }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+<div class="admin-topbar">
+
+    <div class="admin-brand">SPEED-SHIPPING AND SECURITY COMPANY</div>
+
+    <div class="admin-actions">
+
+        {% if user %}<span class="admin-user">Signed in as {{ user }}</span>{% endif %}
+
+        <a href="{{ url_for('track', code='SSS-0001') }}" class="admin-link" target="_blank">Preview Tracker</a>
+
+        <a href="{{ url_for('home') }}" class="admin-link">View Site</a>
+
+        <a href="{{ url_for('logout') }}" class="admin-link">Logout</a>
+
+    </div>
+
+</div>
+
+
+
+<div class="admin-container">
+
+    <h1>LEDGER MANAGER (PRESIDER PANEL)</h1>
+
+    <p class="admin-subtitle">Changes push instantly to the public tracking page — live map marker, destinations, and full ledger update every 2 seconds.</p>
+
+    <form id="ledgerForm">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Tracking Reference Number</label>
+
+                <input type="text" id="tracking_number" placeholder="e.g., GBX-2026-458721" required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Asset Description</label>
+
+                <input type="text" id="asset_description" placeholder="e.g., High Value Bullion Cargo">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Shipment Departure Date</label>
+
+                <input type="date" id="shipment_date">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Expected Delivery Date</label>
+
+                <input type="date" id="expected_date">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Shipment Status</label>
+
+                <select id="shipment_status">
+
+                    <option value="In Transit">In Transit</option>
+
+                    <option value="On Hold">On Hold</option>
+
+                    <option value="Departed Origin">Departed Origin</option>
+
+                    <option value="Arrived Destination Port">Arrived Destination Port</option>
+
+                    <option value="Delivered">Delivered</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Customs Clearance Status</label>
+
+                <input type="text" id="customs_status" placeholder="Awaiting Clearance">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Duties & Taxes</label>
+
+                <select id="duties_taxes">
+
+                    <option value="Unpaid">Unpaid</option>
+
+                    <option value="Paid / Exempt">Paid / Exempt</option>
+
+                    <option value="Under Bonded Transit">Under Bonded Transit</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Insurance Underwriting</label>
+
+                <input type="text" id="insurance_status" value="Active">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Security Level Protocols</label>
+
+                <input type="text" id="security_level" value="High Value Cargo">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Receiver Status</label>
+
+                <input type="text" id="receiver_status" value="Verified Recipient">
+
+            </div>
+
+
+
+            <div class="gps-section">
+
+                <h2>GPS Location (Live Map Sync)</h2>
+                <p style="font-size:12px;color:#666;margin:-8px 0 16px;line-height:1.5;">Select a hub to move the shipment on the customer map. The tracking page polls every 2 seconds and animates the marker to the new destination automatically.</p>
+
+                <div class="form-grid" style="margin:0;">
+
+                    <div class="form-group full-width">
+
+                        <label>Quick-select hub / terminal</label>
+
+                        <select id="location_preset">
+
+                            <option value="">— Manual coordinates —</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Last Verified Location (label)</label>
+
+                        <input type="text" id="last_location" placeholder="e.g., Rotterdam Secure Hub">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>City / Region</label>
+
+                        <input type="text" id="city" placeholder="e.g., Rotterdam, Netherlands">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Latitude</label>
+
+                        <input type="number" id="latitude" step="0.0001" placeholder="51.4700">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Longitude</label>
+
+                        <input type="number" id="longitude" step="0.0001" placeholder="-0.4543">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label>Customs Representative</label>
+
+                <input type="text" id="customs_agent" value="Assigned Agent">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Agent ID</label>
+
+                <input type="text" id="agent_id" value="CA-10452">
+
+            </div>
+
+            <div class="form-group full-width">
+
+                <label>Official Operations Notice Banner</label>
+
+                <textarea id="notice_text" rows="3" placeholder="Enter instructional alert message..."></textarea>
+
+            </div>
+
+            <div class="gps-section">
+
+                <h2>Freight &amp; Delivery Details</h2>
+
+                <div class="form-grid" style="margin:0;">
+
+                    <div class="form-group">
+
+                        <label>Airway Bill No.</label>
+
+                        <input type="text" id="airway_bill" placeholder="112-576488934">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Flight No.</label>
+
+                        <input type="text" id="flight_no" placeholder="SS00324">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Total Freight</label>
+
+                        <input type="text" id="total_freight" placeholder="120kg">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Total Value</label>
+
+                        <input type="text" id="total_value" placeholder="£20,375">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Handling Fee</label>
+
+                        <input type="text" id="handling_fee" placeholder="Unpaid">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Delivery Type</label>
+
+                        <input type="text" id="delivery_type" placeholder="Economy">
+
+                    </div>
+
+                    <div class="form-group full-width">
+
+                        <label>Delivery Address</label>
+
+                        <input type="text" id="delivery_address" placeholder="170 Deville Hill Road, 71342 Jena, LA">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Origin</label>
+
+                        <input type="text" id="origin" placeholder="Heathrow Airport">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Destination</label>
+
+                        <input type="text" id="destination" placeholder="Charlotte Douglas International Airport">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <button type="submit">Synchronize Ledger &amp; Push GPS to Map</button>
+
+        <button type="button" class="btn-secondary" id="loadExistingBtn">Load existing shipment</button>
+
+    </form>
+
+    <div id="toast"></div>
+
+</div>
+
+
+
+<script>
+
+    const presetSelect = document.getElementById('location_preset');
+
+
+
+    fetch('/api/location-presets')
+
+        .then(r => r.json())
+
+        .then(presets => {
+
+            Object.keys(presets).forEach(name => {
+
+                const opt = document.createElement('option');
+
+                opt.value = name;
+
+                opt.textContent = name;
+
+                presetSelect.appendChild(opt);
+
+            });
+
+        });
+
+
+
+    presetSelect.addEventListener('change', () => {
+
+        const name = presetSelect.value;
+
+        if (!name) return;
+
+        fetch('/api/location-presets')
+
+            .then(r => r.json())
+
+            .then(presets => {
+
+                const p = presets[name];
+
+                if (!p) return;
+
+                document.getElementById('last_location').value = name;
+
+                document.getElementById('city').value = p.city || '';
+
+                document.getElementById('latitude').value = p.lat;
+
+                document.getElementById('longitude').value = p.lng;
+
+            });
+
+    });
+
+
+
+    document.getElementById('loadExistingBtn').addEventListener('click', () => {
+
+        const code = document.getElementById('tracking_number').value.trim().toUpperCase();
+
+        if (!code) { alert('Enter a tracking number first.'); return; }
+
+        fetch('/api/shipments/' + encodeURIComponent(code))
+
+            .then(r => r.ok ? r.json() : Promise.reject())
+
+            .then(fillForm)
+
+            .catch(() => alert('Shipment not found in ledger.'));
+
+    });
+
+
+
+    function fillForm(data) {
+
+        document.getElementById('tracking_number').value = data.tracking_number || '';
+
+        document.getElementById('asset_description').value = data.asset_description || '';
+
+        document.getElementById('shipment_date').value = data.shipment_date || '';
+
+        document.getElementById('expected_date').value = data.expected_date || '';
+
+        document.getElementById('shipment_status').value = data.shipment_status || 'In Transit';
+
+        document.getElementById('customs_status').value = data.customs_status || '';
+
+        document.getElementById('duties_taxes').value = data.duties_taxes || 'Unpaid';
+
+        document.getElementById('insurance_status').value = data.insurance_status || '';
+
+        document.getElementById('security_level').value = data.security_level || '';
+
+        document.getElementById('receiver_status').value = data.receiver_status || '';
+
+        document.getElementById('last_location').value = data.last_location || '';
+
+        document.getElementById('city').value = data.city || '';
+
+        document.getElementById('latitude').value = data.latitude != null ? data.latitude : '';
+
+        document.getElementById('longitude').value = data.longitude != null ? data.longitude : '';
+
+        document.getElementById('customs_agent').value = data.customs_agent || '';
+
+        document.getElementById('agent_id').value = data.agent_id || '';
+
+        document.getElementById('notice_text').value = data.notice_text || '';
+
+        document.getElementById('airway_bill').value = data.airway_bill || '';
+
+        document.getElementById('flight_no').value = data.flight_no || '';
+
+        document.getElementById('total_freight').value = data.total_freight || '';
+
+        document.getElementById('total_value').value = data.total_value || '';
+
+        document.getElementById('handling_fee').value = data.handling_fee || '';
+
+        document.getElementById('delivery_type').value = data.delivery_type || '';
+
+        document.getElementById('delivery_address').value = data.delivery_address || '';
+
+        document.getElementById('origin').value = data.origin || '';
+
+        document.getElementById('destination').value = data.destination || '';
+
+    }
+
+
+
+    document.getElementById('ledgerForm').addEventListener('submit', (e) => {
+
+        e.preventDefault();
+
+
+
+        const trackingNum = document.getElementById('tracking_number').value.trim().toUpperCase();
+
+        const payload = {
+
+            tracking_number: trackingNum,
+
+            asset_description: document.getElementById('asset_description').value,
+
+            shipment_date: document.getElementById('shipment_date').value,
+
+            expected_date: document.getElementById('expected_date').value,
+
+            shipment_status: document.getElementById('shipment_status').value,
+
+            customs_status: document.getElementById('customs_status').value,
+
+            duties_taxes: document.getElementById('duties_taxes').value,
+
+            insurance_status: document.getElementById('insurance_status').value,
+
+            security_level: document.getElementById('security_level').value,
+
+            receiver_status: document.getElementById('receiver_status').value,
+
+            last_location: document.getElementById('last_location').value,
+
+            city: document.getElementById('city').value,
+
+            latitude: parseFloat(document.getElementById('latitude').value) || null,
+
+            longitude: parseFloat(document.getElementById('longitude').value) || null,
+
+            customs_agent: document.getElementById('customs_agent').value,
+
+            agent_id: document.getElementById('agent_id').value,
+
+            notice_text: document.getElementById('notice_text').value,
+
+            airway_bill: document.getElementById('airway_bill').value,
+
+            flight_no: document.getElementById('flight_no').value,
+
+            total_freight: document.getElementById('total_freight').value,
+
+            total_value: document.getElementById('total_value').value,
+
+            handling_fee: document.getElementById('handling_fee').value,
+
+            delivery_type: document.getElementById('delivery_type').value,
+
+            delivery_address: document.getElementById('delivery_address').value,
+
+            origin: document.getElementById('origin').value,
+
+            destination: document.getElementById('destination').value,
+
+        };
+
+
+
+        fetch('/api/shipments/' + encodeURIComponent(trackingNum), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify(payload),
+        })
+            .then(function (r) {
+                if (r.ok) return r.json();
+                return fetch('/api/shipments/' + encodeURIComponent(trackingNum) + '/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                }).then(function (r2) {
+                    if (!r2.ok) throw new Error('Save failed');
+                    return r2.json();
+                });
+            })
+            .then(function () {
+                payload.last_updated = new Date().toLocaleString();
+                localStorage.setItem('shipment_' + trackingNum, JSON.stringify(payload));
+                const toast = document.getElementById('toast');
+                toast.innerText = 'GPS + LEDGER SYNCED — Live map updated for ' + trackingNum;
+                setTimeout(function () { toast.innerText = ''; }, 5000);
+            })
+            .catch(function () {
+                localStorage.setItem('shipment_' + trackingNum, JSON.stringify(payload));
+                alert('Saved in browser only. Tracking page will still find code: ' + trackingNum);
+            });
+    });
+
+</script>
+
+</body>
+
+</html>
+
+

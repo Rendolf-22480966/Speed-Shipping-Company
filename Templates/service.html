@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ service.title }} &middot; Speed-Shipping and Security Company</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='service.css') }}">
+</head>
+<body class="service-page{% if service.premium %} service-page--premium{% endif %}">
+
+    <!-- Secure loading screen (Brinks-style entry) -->
+    <div id="serviceLoader" class="service-loader" aria-hidden="true">
+        <div class="service-loader-inner">
+            <div class="service-loader-ring"></div>
+            <p class="service-loader-brand">SPEED-SHIPPING AND SECURITY</p>
+            <p class="service-loader-text">Establishing secure connection&hellip;</p>
+        </div>
+    </div>
+
+    <header class="service-header" id="serviceHeader">
+        <div class="service-header-inner">
+            <a href="{{ url_for('home') }}" class="service-logo">SPEED-SHIPPING AND SECURITY COMPANY</a>
+            <nav class="service-nav">
+                <a href="{{ url_for('home') }}#solutions">Services</a>
+                <a href="{{ url_for('home') }}#contact">Contact</a>
+                <a href="{{ url_for('login') }}" class="service-nav-cta">Officer Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Full-viewport hero -->
+    <section class="service-hero-cinematic">
+        <img
+            class="service-hero-img"
+            src="{{ url_for('static', filename='images/' + service.hero_image) }}"
+            alt="{{ service.title }}"
+        >
+        <div class="service-hero-shade"></div>
+        <div class="service-hero-content service-container">
+            <nav class="service-breadcrumb" aria-label="Breadcrumb">
+                <a href="{{ url_for('home') }}">Home</a>
+                <span aria-hidden="true">/</span>
+                <a href="{{ url_for('home') }}#solutions">Solutions</a>
+                <span aria-hidden="true">/</span>
+                <span class="current">{{ service.title }}</span>
+            </nav>
+            <h1>{{ service.title }}</h1>
+            <p class="service-hero-lead">{{ service.tagline }}</p>
+            <a href="#service-overview" class="service-hero-scroll">Explore this service</a>
+        </div>
+    </section>
+
+    <!-- Overview — clean light band (Brinks-style contrast) -->
+    <section class="service-overview" id="service-overview">
+        <div class="service-container service-overview-grid">
+            <div>
+                <span class="service-eyebrow">Overview</span>
+                <h2>What is {{ service.title }}?</h2>
+                <p class="service-overview-text">{{ service.what_it_means }}</p>
+                {% if service.overview_points %}
+                <ul class="service-overview-points">
+                    {% for point in service.overview_points %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <aside class="service-trust-panel">
+                <span class="service-eyebrow service-eyebrow--dark">Our Credentials</span>
+                <ul class="service-trust-list">
+                    <li>Safe Deposit</li>
+                    <li>Confidential Handling</li>
+                    <li>Securities Protocols</li>
+                    <li>Accredited Clearing</li>
+                </ul>
+                <address class="service-trust-address">
+                    Shoreham Road East, Hounslow<br>
+                    Middlesex, TW6 3UA
+                </address>
+            </aside>
+        </div>
+    </section>
+
+    {% if service.security_protocols %}
+    <section class="service-security">
+        <div class="service-container">
+            <span class="service-eyebrow">Security Framework</span>
+            <h2 class="service-security-title">How we protect your assets</h2>
+            <p class="service-security-intro">Every Speed-Shipping operation is governed by documented security protocols — from access control and GPS monitoring to chain-of-custody and audit reporting.</p>
+            <div class="service-security-grid">
+                {% for protocol in service.security_protocols %}
+                <article class="service-security-card">
+                    <h3>{{ protocol.title }}</h3>
+                    <p>{{ protocol.text }}</p>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if service.editorial_blocks %}
+    {% for block in service.editorial_blocks %}
+    <section class="service-editorial{% if block.reverse %} service-editorial--reverse{% endif %}">
+        <div class="service-editorial-media">
+            <img src="{{ url_for('static', filename='images/' + block.image) }}" alt="{{ block.title }}">
+        </div>
+        <div class="service-editorial-copy">
+            <span class="service-eyebrow service-eyebrow--dark">Operations</span>
+            <h2>{{ block.title }}</h2>
+            <p>{{ block.body }}</p>
+            {% if block.highlights %}
+            <ul class="service-editorial-highlights">
+                {% for item in block.highlights %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </section>
+    {% endfor %}
+    {% endif %}
+
+    <!-- Capabilities -->
+    <section class="service-capabilities">
+        <div class="service-container">
+            <span class="service-eyebrow">Capabilities</span>
+            <h2 class="service-capabilities-title">Who we serve &amp; what we deliver</h2>
+            <div class="service-capabilities-grid{% if not service.clients or not service.features %} service-capabilities-grid--single{% endif %}">
+                {% if service.clients %}
+                <div class="service-capability-col">
+                    <h3>{{ service.clients_heading }}</h3>
+                    <ul class="service-checklist">
+                        {% for item in service.clients %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% if service.features %}
+                <div class="service-capability-col service-capability-col--accent">
+                    <h3>{{ service.features_heading }}</h3>
+                    <ul class="service-checklist">
+                        {% for item in service.features %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    {% if service.gallery and not service.editorial_blocks %}
+    <section class="service-gallery-legacy">
+        <div class="service-container">
+            {% for image in service.gallery %}
+            <figure class="service-gallery-legacy-item">
+                <img src="{{ url_for('static', filename='images/' + image.src) }}" alt="{{ image.caption }}">
+                <figcaption>{{ image.caption }}</figcaption>
+            </figure>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="service-cta-band">
+        <div class="service-container service-cta-band-inner">
+            <div>
+                <h2>Speak with our operations team</h2>
+                <p>Confidential consultations for {{ service.title }} — tailored to your organisation&rsquo;s requirements.</p>
+            </div>
+            <div class="service-cta-band-actions">
+                <a href="{{ url_for('home') }}#contact" class="service-btn service-btn--primary">Request Consultation</a>
+                <a href="{{ url_for('track') }}" class="service-btn service-btn--ghost">Track Consignment</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="service-related-band">
+        <div class="service-container">
+            <span class="service-eyebrow">Related Solutions</span>
+            <div class="service-related-row">
+                {% for slug, item in related.items() %}
+                <a href="{{ url_for('service_detail', slug=slug) }}" class="service-related-link">
+                    <strong>{{ item.title }}</strong>
+                    <span>{{ item.tagline }}</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <footer class="service-footer">
+        <div class="service-container service-footer-inner">
+            <div>
+                <strong>SPEED-SHIPPING AND SECURITY COMPANY</strong>
+                <p>Safe Deposit &middot; Confidential &middot; Securities &middot; Accredited Clearing</p>
+            </div>
+            <div class="service-footer-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('home') }}#solutions">Services</a>
+                <a href="{{ url_for('home') }}#contact">Contact</a>
+            </div>
+        </div>
+        <div class="service-container service-footer-copy">&copy; {{ year }} Speed-Shipping and Security Company</div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='service.js') }}"></script>
+</body>
+</html>

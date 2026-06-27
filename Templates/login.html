@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Access &middot; Speed-Shipping and Security Company</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-page">
+
+    <div class="auth-shell">
+        <div class="auth-aside">
+            <div class="auth-brand">SPEED-SHIPPING AND SECURITY COMPANY</div>
+            <h1>Secure Custody<br>Control Center</h1>
+            <p>Authorized personnel only. Safe deposit, confidential securities handling and accredited clearing records are managed here under end-to-end encryption.</p>
+            <ul class="auth-points">
+                <li>Encrypted session handshake</li>
+                <li>Role-based ledger access</li>
+                <li>Full audit-grade traceability</li>
+            </ul>
+        </div>
+
+        <div class="auth-panel">
+            <div class="auth-lock">&#128274;</div>
+            <h2>OFFICER SIGN-IN</h2>
+            <p class="auth-sub">Enter your secure credentials to access the administration console.</p>
+
+            {% if error %}
+            <div class="auth-error">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST" class="auth-form" autocomplete="off">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="gold-submit-btn">Authenticate</button>
+            </form>
+
+            <a href="{{ url_for('home') }}" class="auth-back">&larr; Return to public site</a>
+        </div>
+    </div>
+
+</body>
+</html>

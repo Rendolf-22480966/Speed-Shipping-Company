@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Shipment &middot; Speed-Shipping and Security Company</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='leaflet/leaflet.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='tracking.css') }}?v=9">
+</head>
+<body class="track-page">
+
+    {% if show_port_warning %}
+    <div id="trackPortWarning" class="track-port-warning" hidden role="alert">
+        <strong>Wrong site link.</strong>
+        This page must be opened on port <strong>{{ site_port }}</strong>.
+        <a id="trackPortFixLink" href="{{ url_for('track', code=code) }}">Open the correct tracking page</a>
+    </div>
+    {% endif %}
+
+    <header class="track-header">
+        <a href="{{ url_for('home') }}" class="track-logo">SPEED-SHIPPING AND SECURITY COMPANY</a>
+        <nav class="track-nav">
+            <a href="{{ url_for('home') }}">Home</a>
+        </nav>
+    </header>
+
+    <section class="track-map-hero" aria-label="Live shipment map">
+        <div id="liveTrackingMap" class="track-map-canvas"></div>
+        <div class="track-map-hud">
+            <div class="track-map-hud-left">
+                <span class="track-live-dot" aria-hidden="true"></span>
+                <span id="mapLiveLabel">LIVE GPS CUSTODY</span>
+            </div>
+            <div class="track-map-hud-right">
+                <span id="mapCityLabel">{% if shipment %}{{ shipment.city or shipment.last_location }} · {{ shipment.shipment_status }}{% else %}Awaiting coordinates&hellip;{% endif %}</span>
+            </div>
+        </div>
+        <div id="trackMapLoading" class="track-map-loading">Loading live GPS map&hellip;</div>
+    </section>
+
+    <main class="track-main">
+        <div class="track-search-bar">
+            <form id="trackSearchForm" class="track-search-form" method="get" action="{{ url_for('track') }}">
+                <label for="trackingInput" class="sr-only">Tracking number</label>
+                <input
+                    type="text"
+                    id="trackingInput"
+                    name="code"
+                    value="{{ code }}"
+                    placeholder="Enter your tracking reference"
+                    autocomplete="off"
+                    required
+                >
+                <button type="submit" class="track-search-btn">Track</button>
+            </form>
+        </div>
+
+        {% if shipment %}
+        <div id="trackingDetails" class="track-details">
+            <div class="track-ledger-brand">
+                <div>
+                    <p class="track-ledger-eyebrow">Speed-Shipping and Security Company</p>
+                    <p class="track-ledger-tagline">Safe Deposit · Confidential · Securities · Accredited Clearing</p>
+                </div>
+                <div class="track-ledger-lock">🔒 Secure custody ledger</div>
+            </div>
+
+            <div class="track-details-header">
+                <div>
+                    <p class="track-details-eyebrow">Secure consignment ledger</p>
+                    <h1 id="displayTrackingNumber">{{ shipment.tracking_number }}</h1>
+                    <p id="displayAssetDesc" class="track-asset-desc">{{ shipment.asset_description or 'High value cargo' }}</p>
+                    <p class="track-ledger-note">Official shipment record on file with Speed-Shipping and Security Company</p>
+                </div>
+                <span id="displayShipmentStatus" class="track-status-badge track-status-badge--{{ (shipment.shipment_status or 'in-transit')|lower|replace(' ', '-') }}">{{ shipment.shipment_status or 'In Transit' }}</span>
+            </div>
+
+            <div class="track-next-dest">
+                <span>Next destination</span>
+                <strong id="displayNextDestination">{{ shipment.next_destination or '—' }}</strong>
+            </div>
+
+            <section class="track-freight-card" aria-label="Freight and delivery details">
+                <h2 class="track-freight-title">Freight &amp; delivery record</h2>
+                <p class="track-freight-intro">Official consignment details on file with Speed-Shipping and Security Company</p>
+                <div class="track-freight-grid">
+                    <div class="track-freight-item">
+                        <span>Airway bill no.</span>
+                        <strong id="displayAirwayBill">{{ shipment.airway_bill or '112-576488934' }}</strong>
+                    </div>
+                    <div class="track-freight-item">
+                        <span>Flight no.</span>
+                        <strong id="displayFlightNo">{{ shipment.flight_no or 'SS00324' }}</strong>
+                    </div>
+                    <div class="track-freight-item">
+                        <span>Origin</span>
+                        <strong id="displayOrigin">{{ shipment.origin or 'Heathrow Airport' }}</strong>
+                    </div>
+                    <div class="track-freight-item">
+                        <span>Destination</span>
+                        <strong id="displayDestination">{{ shipment.destination or 'Charlotte Douglas International Airport' }}</strong>
+                    </div>
+                    <div class="track-freight-item">
+                        <span>Total freight</span>
+                        <strong id="displayTotalFreight">{{ shipment.total_freight or '120kg' }}</strong>
+                    </div>
+                    <div class="track-freight-item">
+                        <span>Total value</span>
+                        <strong id="displayTotalValue">{{ shipment.total_value or '£20,375' }}</strong>
+                    </div>
+                    <div class="track-freight-item">
+                        <span>Handling fee</span>
+                        <strong id="displayHandlingFee">{{ shipment.handling_fee or 'Unpaid' }}</strong>
+                    </div>
+                    <div class="track-freight-item">
+                        <span>Delivery type</span>
+                        <strong id="displayDeliveryType">{{ shipment.delivery_type or 'Economy' }}</strong>
+                    </div>
+                    <div class="track-freight-item track-freight-item--wide">
+                        <span>Delivery address</span>
+                        <strong id="displayDeliveryAddress">{{ shipment.delivery_address or '170 Deville Hill Road, 71342 Jena, LA' }}</strong>
+                    </div>
+                </div>
+            </section>
+
+            <div class="track-journey" id="trackJourneySection" {% if not shipment.journey %}hidden{% endif %}>
+                <h2 class="track-journey-title">Shipment journey &amp; destinations</h2>
+                <div id="trackJourneyTimeline" class="track-journey-timeline">
+                    {% for stop in shipment.journey or [] %}
+                    <div class="track-journey-step track-journey-step--{{ stop.status }}">
+                        <div class="track-journey-node">{{ loop.index }}</div>
+                        <div class="track-journey-copy">
+                            <strong>{{ stop.label }}</strong>
+                            <span>{{ stop.city or '' }}</span>
+                            <em>{% if stop.status == 'completed' %}Passed{% elif stop.status == 'current' %}Current location{% else %}Upcoming{% endif %}</em>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="track-ledger-table">
+                <div class="track-detail-row track-detail-row--heading"><span>Live custody status</span></div>
+                <div class="track-detail-row"><span>Current terminal</span><strong id="displayLocation">{{ shipment.last_location or shipment.city or '—' }}</strong></div>
+                <div class="track-detail-row"><span>GPS coordinates</span><strong id="displayCoords">{% if shipment.latitude is not none and shipment.longitude is not none %}{{ '%.4f'|format(shipment.latitude) }}, {{ '%.4f'|format(shipment.longitude) }}{% else %}—{% endif %}</strong></div>
+                <div class="track-detail-row"><span>Customs clearance</span><strong id="displayCustomsStatus">{{ shipment.customs_status or '—' }}</strong></div>
+                <div class="track-detail-row"><span>Duties / taxes</span><strong id="displayDutiesTaxes">{{ shipment.duties_taxes or '—' }}</strong></div>
+                <div class="track-detail-row"><span>Insurance</span><strong id="displayInsurance">{{ shipment.insurance_status or '—' }}</strong></div>
+                <div class="track-detail-row"><span>Security level</span><strong id="displaySecurity">{{ shipment.security_level or '—' }}</strong></div>
+                <div class="track-detail-row"><span>Receiver status</span><strong id="displayReceiver">{{ shipment.receiver_status or '—' }}</strong></div>
+                <div class="track-detail-row"><span>Assigned agent</span><strong id="displayAgent">{{ shipment.customs_agent or 'Officer' }} [{{ shipment.agent_id or '—' }}]</strong></div>
+                <div class="track-detail-row"><span>Departure date</span><strong id="displayShipmentDate">{{ shipment.shipment_date or '—' }}</strong></div>
+                <div class="track-detail-row"><span>Expected arrival</span><strong id="displayExpectedDate">{{ shipment.expected_date or '—' }}</strong></div>
+            </div>
+
+            {% if shipment.notice_text %}
+            <div id="displayNoticeWrap" class="track-notice">
+                <h3>Operations notice</h3>
+                <p id="displayNotice">{{ shipment.notice_text }}</p>
+            </div>
+            {% else %}
+            <div id="displayNoticeWrap" class="track-notice" hidden>
+                <h3>Operations notice</h3>
+                <p id="displayNotice"></p>
+            </div>
+            {% endif %}
+
+            <p class="track-sync-line">Last verified update: <span id="displayLastUpdated">{{ shipment.last_updated or 'Verified' }}</span></p>
+        </div>
+        {% endif %}
+    </main>
+
+    <footer class="track-footer">
+        <a href="{{ url_for('home') }}">&larr; Return to homepage</a>
+    </footer>
+
+    <script src="{{ url_for('static', filename='leaflet/leaflet.js') }}"></script>
+    <script src="{{ url_for('static', filename='tracking.js') }}?v=7"></script>
+    <script>
+        (function () {
+            if (typeof L === 'undefined') {
+                document.getElementById('trackMapLoading').textContent =
+                    'Map engine failed to load. Restart START WEBSITE.bat and refresh.';
+                return;
+            }
+
+            var code = {{ code|tojson }};
+            var cachedHudCity = '';
+            var hasServerLedger = {{ 'true' if code else 'false' }};
+
+            var els = {
+                details: document.getElementById('trackingDetails'),
+                mapLoading: document.getElementById('trackMapLoading'),
+                cityLabel: document.getElementById('mapCityLabel'),
+                liveLabel: document.getElementById('mapLiveLabel'),
+            };
+
+            if (!code) {
+                if (els.cityLabel) els.cityLabel.textContent = 'Enter a tracking code below';
+            }
+
+            var liveMap = new LiveTrackingMap('liveTrackingMap', {
+                trackingCode: code || '',
+                onUpdate: hasServerLedger ? refreshFromServer : null,
+            });
+
+            function setText(id, value) {
+                if (!value) return;
+                var node = document.getElementById(id);
+                if (node) node.textContent = value;
+            }
+
+            function setTextOrDash(id, value) {
+                var node = document.getElementById(id);
+                if (node) node.textContent = value || '—';
+            }
+
+            function refreshFromServer(data, meta) {
+                if (!data || !meta || (!meta.initial && !meta.changed)) return;
+
+                setTextOrDash('displayLocation', data.last_location || data.city);
+                setTextOrDash('displayCoords',
+                    (data.latitude != null && data.longitude != null)
+                        ? data.latitude.toFixed(4) + ', ' + data.longitude.toFixed(4)
+                        : '—');
+                setTextOrDash('displayNextDestination', data.next_destination);
+                setTextOrDash('displayLastUpdated', data.last_updated || 'Verified');
+                setText('displayAirwayBill', data.airway_bill);
+                setText('displayFlightNo', data.flight_no);
+                setText('displayOrigin', data.origin);
+                setText('displayDestination', data.destination);
+                setText('displayTotalFreight', data.total_freight);
+                setText('displayTotalValue', data.total_value);
+                setText('displayHandlingFee', data.handling_fee);
+                setText('displayDeliveryType', data.delivery_type);
+                setText('displayDeliveryAddress', data.delivery_address);
+
+                cachedHudCity = (data.city || data.last_location || 'In transit') +
+                    (data.shipment_status ? ' · ' + data.shipment_status : '');
+                if (meta.changed) els.cityLabel.textContent = cachedHudCity;
+            }
+
+            function startMap() {
+                liveMap.initBaseMap().then(function () {
+                    if (els.mapLoading) els.mapLoading.hidden = true;
+                    if (!code) return;
+
+                    liveMap.trackingCode = code;
+                    {% if shipment and shipment.latitude is not none %}
+                    if (liveMap.map) {
+                        liveMap.map.setView([{{ shipment.latitude }}, {{ shipment.longitude }}], 6);
+                    }
+                    {% endif %}
+                    liveMap.fetchAndRender(true).then(function () {
+                        liveMap.startPolling();
+                    });
+
+                    if (els.liveLabel) {
+                        els.liveLabel.textContent = 'LIVE GPS · ' + code;
+                    }
+                }).catch(function () {
+                    if (els.mapLoading) {
+                        els.mapLoading.textContent = 'Unable to start map. Please refresh the page.';
+                    }
+                });
+            }
+
+            startMap();
+
+            var expectedPort = String({{ site_port }});
+            var showPortWarning = {{ 'true' if show_port_warning else 'false' }};
+            var currentPort = window.location.port || (window.location.protocol === 'https:' ? '443' : '80');
+            if (showPortWarning && expectedPort && currentPort !== expectedPort) {
+                var warn = document.getElementById('trackPortWarning');
+                var fix = document.getElementById('trackPortFixLink');
+                if (warn) warn.hidden = false;
+                if (fix && code) {
+                    fix.href = window.location.pathname + '?code=' + encodeURIComponent(code);
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

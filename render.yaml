@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: speed-shipping-security
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.3"
+      - key: RBH_SECRET_KEY
+        generateValue: true
+      - key: RBH_ADMIN_USER
+        value: admin
+      - key: RBH_ADMIN_PASS
+        sync: false
