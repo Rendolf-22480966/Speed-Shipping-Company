@@ -789,16 +789,6 @@
     .vault-ledger-grid {
         grid-template-columns: 1fr;
     }
-
-    .vault-asset-banner {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .vault-hero-meta {
-        flex-direction: column;
-        align-items: flex-start;
-    }
 }
 
 /* ==========================================================================
@@ -1051,8 +1041,10 @@
 
 .vault-row {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    gap: 12px;
+    align-items: flex-start;
+    gap: 16px;
     padding: 12px 16px;
     border-bottom: 1px solid rgba(126, 184, 218, 0.06);
     font-size: 13px;
@@ -1064,13 +1056,20 @@
 
 .vault-row span {
     color: #6a8fa8;
-    flex-shrink: 0;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    flex: 0 0 42%;
+    max-width: 42%;
 }
 
 .vault-row strong {
     color: #d4e8f7;
     font-weight: 600;
     text-align: right;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
+    flex: 1;
 }
 
 .vault-row em {
@@ -1078,12 +1077,14 @@
     font-size: 11px;
     color: #5a7f98;
     text-align: right;
-    width: 100%;
+    flex: 1;
+    line-height: 1.4;
 }
 
 .vault-row--sub {
     padding-top: 0;
-    margin-top: -6px;
+    margin-top: -4px;
+    padding-bottom: 10px;
 }
 
 .vault-text-warn {
@@ -1101,4 +1102,138 @@
     line-height: 1.6;
     color: #5a7f98;
     margin: 0 0 10px;
+}
+
+/* Vault ledger — phone layout (must come after base vault styles) */
+@media (max-width: 640px) {
+    .vault-client-page {
+        overflow-x: hidden;
+    }
+
+    .vault-hero {
+        min-height: 0;
+        padding: 24px 14px 20px;
+    }
+
+    .vault-gold-stack {
+        display: none;
+    }
+
+    .vault-hero-title {
+        font-size: 20px;
+        letter-spacing: 0.5px;
+        line-height: 1.25;
+    }
+
+    .vault-hero-sub {
+        font-size: 12px;
+        margin-bottom: 14px;
+    }
+
+    .vault-hero-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 11px;
+    }
+
+    .track-main {
+        padding: 12px 12px 40px;
+    }
+
+    .vault-ledger {
+        padding: 16px 12px 14px;
+    }
+
+    .vault-ledger-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding-bottom: 14px;
+    }
+
+    .vault-ledger-header h2 {
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+
+    .vault-ledger-ref {
+        font-size: 10px;
+        word-break: break-all;
+        line-height: 1.5;
+    }
+
+    .vault-status-badge {
+        max-width: none;
+        width: 100%;
+        text-align: left;
+        font-size: 9px;
+        letter-spacing: 1px;
+        padding: 8px 10px;
+        line-height: 1.5;
+    }
+
+    .vault-asset-banner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+        padding: 14px 12px;
+        margin-bottom: 16px;
+    }
+
+    .vault-asset-banner h3 {
+        font-size: 17px;
+    }
+
+    .vault-asset-meta {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .vault-asset-value {
+        margin-left: 0;
+        text-align: left;
+        width: 100%;
+        padding-top: 10px;
+        border-top: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .vault-asset-value strong {
+        font-size: 16px;
+    }
+
+    .vault-ledger-grid {
+        gap: 14px;
+    }
+
+    .vault-ledger-section h4 {
+        font-size: 9px;
+        padding: 10px 12px;
+    }
+
+    .vault-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .vault-row span {
+        flex: none;
+        max-width: none;
+        width: 100%;
+    }
+
+    .vault-row strong,
+    .vault-row em {
+        flex: none;
+        width: 100%;
+        text-align: left;
+    }
+
+    .vault-ledger-footer p {
+        font-size: 10px;
+    }
 }
