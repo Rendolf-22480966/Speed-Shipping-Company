@@ -1091,6 +1091,19 @@
     color: #ffb84d !important;
 }
 
+.vault-text-ok {
+    color: #6ee7a8 !important;
+}
+
+.vault-row--divider {
+    height: 1px;
+    min-height: 1px;
+    padding: 0 12px;
+    margin: 4px 0;
+    background: rgba(126, 184, 218, 0.1);
+    border-bottom: none;
+}
+
 .vault-ledger-footer {
     margin-top: 24px;
     padding-top: 18px;

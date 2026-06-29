@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='leaflet/leaflet.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='tracking.css') }}?v=11">
+    <link rel="stylesheet" href="{{ url_for('static', filename='tracking.css') }}?v=12">
 </head>
 <body class="track-page{% if vault %} vault-client-page{% endif %}">
 
@@ -147,11 +147,19 @@
                 <div class="vault-ledger-section">
                     <h4>Financial clearance</h4>
                     <div class="vault-ledger-rows">
-                        <div class="vault-row"><span>Outstanding clearance fee</span><strong class="vault-text-warn">{{ vault.outstanding_clearance_fee }}</strong></div>
+                        <div class="vault-row"><span>Clearance assessment (120kg gold)</span><strong>{{ vault.clearance_assessment or '£20,375.00' }}</strong></div>
+                        <div class="vault-row"><span>Outstanding clearance balance</span><strong class="vault-text-warn">{{ vault.outstanding_clearance_fee }}</strong></div>
                         <div class="vault-row"><span>Valuation reference</span><strong>{{ vault.valuation_reference }}</strong></div>
-                        <div class="vault-row"><span>Recent payment record</span><strong>{{ vault.recent_payment_date }}</strong></div>
+                        <div class="vault-row vault-row--divider" aria-hidden="true"></div>
+                        <div class="vault-row"><span>Latest payment received</span><strong>{{ vault.recent_payment_date }}</strong></div>
+                        <div class="vault-row"><span>Payment amount</span><strong class="vault-text-ok">{{ vault.recent_payment_amount }}</strong></div>
+                        <div class="vault-row"><span>Mode of payment</span><strong>{{ vault.recent_payment_mode }}</strong></div>
                         <div class="vault-row vault-row--sub"><span></span><em>{{ vault.recent_payment_source }}</em></div>
                         <div class="vault-row"><span>Receipt number</span><strong>{{ vault.receipt_number }}</strong></div>
+                        <div class="vault-row vault-row--divider" aria-hidden="true"></div>
+                        <div class="vault-row"><span>Initial payment record</span><strong>{{ vault.initial_payment_date or vault.recent_payment_date }}</strong></div>
+                        <div class="vault-row vault-row--sub"><span></span><em>{{ vault.initial_payment_source or vault.recent_payment_source }}</em></div>
+                        <div class="vault-row"><span>Initial receipt no.</span><strong>{{ vault.initial_receipt_number or vault.receipt_number }}</strong></div>
                     </div>
                 </div>
             </div>
